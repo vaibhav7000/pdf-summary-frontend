@@ -3,14 +3,17 @@ import Home from "../pages/Home";
 import Register from "../pages/Register";
 import Login from "../pages/Login";
 import ApplicationWrapper from "../Wrappers/ApplicationWrapper";
+import AuthWrapper from "../Wrappers/AuthWrapper";
 
 
 export default function AllRoutes() {
 
     return (
         <Routes>
-            <Route path="register" element={<Register/>} />
-            <Route path="login" element={<Login/>} />
+            <Route element={<AuthWrapper/>}>
+                <Route path="register" index element={<Register/>} />
+                <Route path="login" element={<Login/>} />
+            </Route>
 
             <Route path="" element={<ApplicationWrapper/>}>
                 <Route index element={<Home/>} />

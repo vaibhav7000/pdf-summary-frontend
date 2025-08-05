@@ -75,7 +75,7 @@ const Form = React.memo(function({valid, setResponse, setCursor}: FormProps) {
     }, []);
 
     return (
-        <form  className="flex flex-col gap-y-6 w-full grow-2 px-6 py-6 rounded-lg text-card-foreground shadow-sm bg-slate-800/30 backdrop-blur-lg border border-slate-700/50" onSubmit={getSummary}>
+        <form  className="flex flex-col gap-y-6 w-full grow-2 px-6 py-6 rounded-lg text-card-foreground shadow-sm bg-card backdrop-blur-lg border border-slate-700/50" onSubmit={getSummary}>
             <Wrapper>
                 <div className="font-semibold tracking-tight font-headline text-2xl text-white/60">Get Summary of PDF</div>
                 <div className="text-sm text-[#7099c2]">Enter topic, pdf and get the Summary of that</div>

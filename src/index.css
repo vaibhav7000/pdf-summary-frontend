@@ -7,4 +7,8 @@
     --font-arimo: "Arimo", sans-serif;
     --tw-ring-offset-color: #202c3c;
     --color-input: #3d4a5c;
+    --color-card-foreground: #f8fafc;
+    --color-card: #273549b3;
+    --color-muted-foreground: #7099c2;
+    --color-muted-border: #3d4a5c;
 }
