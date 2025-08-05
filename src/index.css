@@ -1,1 +1,10 @@
-@import "tailwindcss"
+@import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&display=swap');
+@import "tailwindcss";
+
+
+@theme {
+    --color-background: #202c3c;
+    --font-arimo: "Arimo", sans-serif;
+    --tw-ring-offset-color: #202c3c;
+    --color-input: #3d4a5c;
+}

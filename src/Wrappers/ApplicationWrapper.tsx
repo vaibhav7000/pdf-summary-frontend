@@ -6,9 +6,8 @@ import Error from "../components/Error";
 
 export default function ApplicationWrapper() {
     const { loading, error, valid } = useAuth();
-
     return (
-        <>
+        <div className="bg-background h-screen w-screen font-arimo pt-[104px]">
             {loading &&
                 <Loading />
             }
@@ -20,7 +19,7 @@ export default function ApplicationWrapper() {
                     valid
                 }} />
             }
-        </>
+        </div>
 
 
 
