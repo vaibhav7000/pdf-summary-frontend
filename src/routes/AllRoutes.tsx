@@ -4,6 +4,7 @@ import Register from "../pages/Register";
 import Login from "../pages/Login";
 import ApplicationWrapper from "../Wrappers/ApplicationWrapper";
 import AuthWrapper from "../Wrappers/AuthWrapper";
+import AllSummaries from "../pages/AllSummaries";
 
 
 export default function AllRoutes() {
@@ -17,6 +18,7 @@ export default function AllRoutes() {
 
             <Route path="" element={<ApplicationWrapper/>}>
                 <Route index element={<Home/>} />
+                <Route path="allsummary" element={<AllSummaries/>} />
             </Route>
         </Routes>
     )

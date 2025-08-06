@@ -16,6 +16,7 @@ export interface LoginPayload {
     issues?: ZodError[];
     firstname?: string;
     lastname?: string;
+    newUrl?: string;
 }
 
 export default function Login() {

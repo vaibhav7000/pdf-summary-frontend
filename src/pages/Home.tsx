@@ -31,15 +31,15 @@ export default function Home() {
 
 
     return (
-        <div className="h-full w-full flex flex-row justify-between pr-24 items-center">
+        <div className="h-full w-full flex flex-row justify-between items-center pt-[104px]">
             {/* {valid && <SideBar/>} */}
-            <div className="w-full flex flex-col justify-start items-center basis-3/4 self-start pl-10 gap-y-6">
+            <div className="w-3/4 flex flex-col justify-start items-center mx-auto self-start gap-y-6">
                 <Form setResponse={setResponse} valid={valid} setCursor={setCursor} />
 
                 <div className="flex flex-row self-start">
                     {cursor && <span className="h-2.5 w-2.5 bg-emerald-500 rounded-full animate-pulse"></span>}
                     {response &&
-                        <div>
+                        <div className="text-white">
                             <ReactMarkdown>
                                 {text}
                             </ReactMarkdown>
