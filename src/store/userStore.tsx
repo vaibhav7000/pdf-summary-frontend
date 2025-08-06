@@ -7,7 +7,7 @@ interface UserStorage {
 }
 
 const userAtom = atomWithStorage<UserStorage>("client", {
-    token: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZjaGF3bGE3MDAwQGdtYWlsLmNvbSIsImlkIjoxLCJpYXQiOjE3NTQyMDg4MjV9.RYdXOL_igjW2AVxXM3kWfXN5h5c1Jvu509PvgVbiL5",
+    token: "",
     firstname: null,
     lastname: null
 }, {

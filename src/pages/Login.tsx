@@ -3,15 +3,19 @@ import Input from "../components/Input";
 import { useNavigate } from "react-router";
 import { baseBackendUrl } from "../utils/constants";
 import { StatusCodes } from "http-status-codes";
-import { ZodError } from "zod";
+import { string, ZodError } from "zod";
 import OTP from "../components/OTP";
 import Loading from "../components/Loading";
+import { useSetAtom } from "jotai";
+import userAtom from "../store/userStore";
 
-interface LoginPayload {
+export interface LoginPayload {
     phrase: string;
     msg: string;
     token?: string;
-    issues?: ZodError[],
+    issues?: ZodError[];
+    firstname?: string;
+    lastname?: string;
 }
 
 export default function Login() {
@@ -21,11 +25,13 @@ export default function Login() {
     const navigate = useNavigate();
 
     const [withOtp, setWithOtp] = useState<boolean>(false);
-    const [otpSent, setOtpSent] = useState<boolean>(true);
+    const [otpSent, setOtpSent] = useState<boolean>(false);
 
     const [isEmailInvalid, setIsEmailValid] = useState<boolean>(true);
     const [isPasswordValid, setIsPasswordValid] = useState<boolean>(true);
     const [loading, setLoading] = useState<boolean>(false);
+
+    const setUserAtom = useSetAtom(userAtom);
 
     useEffect(function() {
         emailRef.current?.focus();
@@ -89,7 +95,20 @@ export default function Login() {
                 return;
             }
 
-            console.log(output);
+            let token: string = "";
+
+            if(output.token) {
+                token = `Bearer ${output["token"]}`
+            }
+            setUserAtom({
+                token: token,
+                firstname: output["firstname"] ?? "",
+                lastname: output["lastname"] ?? "",
+            });
+
+            navigate("/", {
+                replace: true
+            })
         } catch (error) {
             
         }
@@ -97,8 +116,8 @@ export default function Login() {
 
     return (
         <div className="rounded-lg border text-card-foreground shadow-sm w-full max-w-md bg-card/70 backdrop-blur-lg border-muted-border p-6 flex flex-col gap-y-6">
-        {!otpSent &&          
-            <div>
+        {          
+            <div className={`${otpSent ? "hidden" : ""}`}>
                 <div className="flex flex-col space-y-2 text-center">
                     <div className="font-semibold tracking-tight font-headline text-2xl">Welcome to PDF AI</div>
                     <div className="text-sm text-muted-foreground">Your AI-powered assistant.</div>
@@ -146,7 +165,7 @@ export default function Login() {
             </div>
         }
 
-        {otpSent && <OTP email={emailRef.current?.value || "vchawla"} sendLoginRequest={sendLoginRequest} />}
+        {otpSent && emailRef.current && <OTP email={emailRef.current.value} sendLoginRequest={sendLoginRequest} />}
 
         </div>
     )
