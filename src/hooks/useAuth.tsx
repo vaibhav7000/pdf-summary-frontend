@@ -24,7 +24,9 @@ function useAuth(): UseAuthReturn {
         async function verifyUser() {
             const api: string = `${baseBackendUrl}/summary/all`;
             if(!user.token) {
+                setValid(false);
                 setLoading(false);
+                setError(false);
                 return;
             }
             
@@ -53,15 +55,17 @@ function useAuth(): UseAuthReturn {
 
                 setPdfAtom(output["pdfs"]);
                 setValid(true);
+                setError(false);
             } catch (error) {
                 console.log(error)
                 setError(true);
                 setLoading(false);
+                setValid(false);
             }
         }
 
         verifyUser();
-    }, [])
+    }, [user])
 
     return {loading, valid, error}
 }

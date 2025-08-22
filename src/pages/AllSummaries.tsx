@@ -27,7 +27,7 @@ export default function AllSummaries(): JSX.Element {
     return (
         <>
             {valid && 
-                <div className="flex flex-row gap-x-10 gap-y-10 flex-wrap w-[90%] mx-auto pt-[104px]">
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-x-6 gap-y-8 flex-wrap w-[85%] mx-auto pt-[104px]">
                     {pdfs && pdfs.map((pdf, index) => <Summary index={index} id={pdf.id} key={pdf.id} pdf={pdf}/>)}
                 </div>
             }

@@ -3,7 +3,10 @@ import Input from "./Input";
 import { baseBackendUrl } from "../utils/constants";
 import { useAtomValue } from "jotai";
 import userAtom from "../store/userStore";
-import { useNavigate } from "react-router";
+import { redirectDocument, useNavigate } from "react-router";
+import { StatusCodes } from "http-status-codes";
+import { LoginPayload } from "../pages/Login";
+import { toast } from "react-toastify";
 
 type FormProps = {
     valid: boolean;
@@ -59,7 +62,19 @@ const Form = React.memo(function({valid, setResponse, setCursor}: FormProps) {
                 body: formData
             })
 
-            const output = await response.json();
+            const output = await response.json() as LoginPayload;
+            setCursor(false);
+            if(response.status === StatusCodes.UNAUTHORIZED) {
+                toast.error(output.msg);
+                return;
+            }
+
+            if(response.status === StatusCodes.LENGTH_REQUIRED) {
+                output.issues?.map(issue => {
+                    toast.error(issue.message);
+                })
+                return;
+            }
 
 
             setResponse(output.summary);

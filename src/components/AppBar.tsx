@@ -1,7 +1,7 @@
 import { useAtom, useAtomValue } from "jotai"
 import { Link, useNavigate } from "react-router"
 import userAtom from "../store/userStore"
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function AppBar({ valid }: { valid: boolean }) {
 
@@ -20,10 +20,52 @@ export default function AppBar({ valid }: { valid: boolean }) {
         return () => clearTimeout(timeout);
     }, [logout]);
 
+    const prevScroll = useRef<number>(0);
+    const latestScroll = useRef<number>(0);
+    const ref = useRef<HTMLDivElement>(null);
+
+    useEffect(function() {
+        function scrollEvent() {
+            prevScroll.current = latestScroll.current;
+            latestScroll.current = window.scrollY;
+            const divElement = ref.current;
+            const scroll = 45;
+
+            if(latestScroll.current > prevScroll.current) {
+                if(divElement) {
+                    divElement.classList.remove('top-0')
+                    divElement.classList.add(`-top-[90px]`);
+                }
+            } else {
+                if(divElement) {
+                    divElement.classList.add('top-0')
+                    divElement.classList.remove(`-top-[90px]`);
+                }
+            }
+
+            console.log()
+            if(latestScroll.current > scroll) {
+                if(divElement) {
+                    divElement.classList.add("bg-black");
+                    divElement.classList.remove("bg-transparent");
+                }
+            } else {
+                if(divElement) {
+                    divElement.classList.remove("bg-black");
+                    divElement.classList.add("bg-transparent");
+                }
+            }
+        }
+
+        window.addEventListener("scroll", scrollEvent);
+
+        return () => window.removeEventListener("scroll", scrollEvent);
+    }, []);
+
     return (
         <>
             {valid &&
-                <div className="fixed top-0 h-[90px] w-full">
+                <div className="fixed top-0 h-[90px] w-full z-2 transition-all duration-300 ease-linear transition-discrete" ref={ref}>
                     <div className="w-3/4 mx-auto flex items-center h-full justify-between">
                         <Link className="font-bold text-2xl text-white hover:text-muted-foreground" to="/">
                             Ask AI
@@ -39,7 +81,9 @@ export default function AppBar({ valid }: { valid: boolean }) {
                                 firstname: null,
                                 lastname: null
                             })
-
+                               
+                            setLogout(false);
+                            
                             navigate("/", {
                                 replace: true
                             })

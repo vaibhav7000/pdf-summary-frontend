@@ -6,11 +6,15 @@ import AppBar from "../components/AppBar";
 
 
 export default function ApplicationWrapper() {
+    // custom hook
     const { loading, error, valid } = useAuth();
+
     return (
         <div className="bg-background min-h-screen w-screen font-arimo pb-10">
             {loading &&
-                <Loading />
+                <div className="h-screen w-screen">
+                    <Loading />
+                </div>
             }
 
             {!loading && error && <Error />}
