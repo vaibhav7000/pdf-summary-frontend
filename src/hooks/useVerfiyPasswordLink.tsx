@@ -17,6 +17,7 @@ const useVerifyPasswordLink = (email: string, token: string) => {
 
         async function verifyLink() {
             try {
+                console.log(email, token)
                 const response = await fetch(`${baseBackendUrl}/resetpassword/${email}/${token}`, {
                     method: "GET"
                 });
