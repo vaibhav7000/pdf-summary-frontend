@@ -5,6 +5,8 @@ import useVerifyPasswordLink from "../hooks/useVerfiyPasswordLink";
 import { changePasswordSchema } from "../utils/zod/zod";
 import { baseBackendUrl } from "../utils/constants";
 import { StatusCodes } from "http-status-codes";
+import generateToastDefault from "../utils/toasts";
+import { BaseResponseType, LengthRequiredType, RequestTimeoutType } from "../utils/types/types";
 
 const ResetPassword = () => {
     const {token, email} = useParams<{
@@ -52,7 +54,7 @@ const ResetPassword = () => {
         })
 
         if(!result.success) {
-            console.log(result.error.issues);
+            result.error.issues.forEach(issue => generateToastDefault(issue.message));
             return;
         }
 
@@ -70,25 +72,22 @@ const ResetPassword = () => {
             });
 
             const statusCode = response.status;
-            const output = await response.json();
+            const output = await response.json() as BaseResponseType;
             if(statusCode === StatusCodes.LENGTH_REQUIRED) {
-                
-                alert("Issue with the parameters");
-                console.log()
+                const final = output as LengthRequiredType;
+                final.issues.forEach(issue => generateToastDefault(issue.message, "error"));
             } else if(statusCode === StatusCodes.REQUEST_TIMEOUT) {
-
-                alert("Link Expired");
+                const final = output as RequestTimeoutType;
+                generateToastDefault(final.msg, "error");
             } else {
-                // confirmation done
-                alert("Password Successfully changed");
+                generateToastDefault(output.msg, "success");
                 navigate("/login", {
                     replace: true
                 });
             }
         } catch (error) {
-            
+            generateToastDefault("Something up with the backend server", "info");
         }
-
     }, []);
 
 

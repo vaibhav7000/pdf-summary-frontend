@@ -47,4 +47,7 @@ export default function AllRoutes() {
     
     
 
+    "Toast" or Toastify notifications are pop-up messages that come up with some information generally on the side bar.
+
+    "React-toastify" implements the toast notification in react. Provides default properties that gives the pop-up
 */

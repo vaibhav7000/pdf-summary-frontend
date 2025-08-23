@@ -3,13 +3,14 @@ import Input from "../components/Input";
 import { useNavigate } from "react-router";
 import { baseBackendUrl } from "../utils/constants";
 import { StatusCodes } from "http-status-codes";
-import { string, ZodError } from "zod";
+import { ZodError } from "zod";
 import OTP from "../components/OTP";
 import Loading from "../components/Loading";
 import { useSetAtom } from "jotai";
 import userAtom from "../store/userStore";
 import { emailSchema } from "../utils/zod/zod";
-import { BaseResponseType, LengthRequiredType } from "../utils/types/types";
+import { BaseResponseType, ForbiddenType, LengthRequiredType, LoginPayloadType } from "../utils/types/types";
+import generateToastDefault from "../utils/toasts";
 
 export interface LoginPayload {
     phrase: string;
@@ -46,8 +47,14 @@ export default function Login() {
     const sendLoginRequest = useCallback(async function() {
         const apiUrl: string = `${baseBackendUrl}/login/${withOtp ? "otp" : "password"}`;
 
-        if(!emailRef.current?.value) {
+        if(!emailRef.current) {
+            generateToastDefault("Something up with the frontend")
             setIsEmailValid(false);
+            return;
+        }
+
+        if(!emailRef.current.value) {
+            generateToastDefault("Enter valid email");
             return;
         }
 
@@ -55,7 +62,6 @@ export default function Login() {
         const payload: {
             email: string;
             password?: string;
-
         } = {
             email: emailRef.current.value
         }
@@ -64,7 +70,9 @@ export default function Login() {
             if(passwordRef.current?.value) {
                 payload["password"] = passwordRef.current.value
             } else {
+                alert("Enter a valid password")
                 setIsPasswordValid(false);
+                return;
             }
         }
 
@@ -80,19 +88,23 @@ export default function Login() {
                 })
             });
 
-            const output = await response.json() as LoginPayload;
+            const output = await response.json();
             console.log(response);
 
             setLoading(false)
 
             if(response.status === StatusCodes.LENGTH_REQUIRED) {
-                output.issues?.forEach(err => {
-                    console.log(err.message)
+                const final = output as LengthRequiredType;
+                final.issues?.forEach(err => {
+                    generateToastDefault(err.message, "error");
                 });
+
+                return;
             }
 
             if(response.status === StatusCodes.FORBIDDEN) {
-                console.log(output.msg);
+                const final = output as ForbiddenType;
+                generateToastDefault(final.msg, "error");
                 return;
             }
 
@@ -101,15 +113,17 @@ export default function Login() {
                 return;
             }
 
+            const final = output as LoginPayloadType;
             let token: string = "";
 
-            if(output.token) {
+            if(final.token) {
                 token = `Bearer ${output["token"]}`
-            }
+            };
+            
             setUserAtom({
                 token: token,
-                firstname: output["firstname"] ?? "",
-                lastname: output["lastname"] ?? "",
+                firstname: final["firstname"],
+                lastname: final["lastname"],
             });
 
             navigate("/", {
@@ -149,14 +163,13 @@ export default function Login() {
                 const faults = output as LengthRequiredType;
 
                 faults.issues.map(issue => {
-                    console.log(issue);
+                    generateToastDefault(issue.message, "error");
                 })
 
-                alert(faults.msg);
             } else if (response.status === StatusCodes.UNAUTHORIZED) {
                 const faults = output as BaseResponseType;
 
-                alert(faults.msg);
+                generateToastDefault(faults.msg)
             }
             setForgetPasswordLinkSent(true);
         } catch(error) {
