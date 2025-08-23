@@ -24,6 +24,10 @@ export default function Home() {
         //     setResponse(oldSummaries);
         // }
 
+        if(!response) {
+            return;
+        }
+
         if (text !== response) {
             timeout = setTimeout(function () {
                 setText(prev => response.slice(0, prev.length + 1));

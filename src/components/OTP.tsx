@@ -11,10 +11,11 @@ import { LengthRequiredType, LoginPayloadType, RequestTimeoutType } from "../uti
 
 interface OTPProps {
     email: string;
-    sendLoginRequest: () => Promise<void>
+    sendLoginRequest: () => Promise<void>;
+    path: string;
 }
 
-const OTP = memo(function ({ email, sendLoginRequest }: OTPProps) {
+const OTP = memo(function ({ email, sendLoginRequest, path }: OTPProps) {
 
     const allRef: React.RefObject<HTMLInputElement | null>[] = [useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null)]
 
@@ -127,7 +128,7 @@ const OTP = memo(function ({ email, sendLoginRequest }: OTPProps) {
 
         setLoading(true);
         try {
-            const api: string = `${baseBackendUrl}/login/verifyotp`;
+            const api: string = `${baseBackendUrl}/${path}/verifyotp`;
             const response = await fetch(api, {
                 method: "POST",
                 headers: {

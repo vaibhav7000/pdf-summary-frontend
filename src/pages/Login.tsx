@@ -11,6 +11,7 @@ import userAtom from "../store/userStore";
 import { emailSchema } from "../utils/zod/zod";
 import { BaseResponseType, ForbiddenType, LengthRequiredType, LoginPayloadType } from "../utils/types/types";
 import generateToastDefault from "../utils/toasts";
+import CardWrapper from "../Wrappers/CardWrapper";
 
 export interface LoginPayload {
     phrase: string;
@@ -181,7 +182,7 @@ export default function Login() {
     }, []);
 
     return (
-        <div className="rounded-lg border text-card-foreground shadow-sm w-full max-w-md bg-card/70 backdrop-blur-lg border-muted-border p-6 flex flex-col gap-y-6">
+        <CardWrapper>
         {          
             <div className={`${otpSent ? "hidden" : ""}`}>
                 <div className="flex flex-col space-y-2 text-center">
@@ -244,8 +245,8 @@ export default function Login() {
             </div>
         }
 
-        {otpSent && emailRef.current && <OTP email={emailRef.current.value} sendLoginRequest={sendLoginRequest} />}
+        {otpSent && emailRef.current && <OTP path="login" email={emailRef.current.value} sendLoginRequest={sendLoginRequest} />}
 
-        </div>
+        </CardWrapper>
     )
 }

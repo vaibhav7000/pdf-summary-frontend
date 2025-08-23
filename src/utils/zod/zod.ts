@@ -25,9 +25,33 @@ const changePasswordSchema = z.strictObject({
             password: true, confirm: true
         }).safeParse(payload.value).success
     }
+});
+
+
+const registerSchema = z.strictObject({
+
+    password: z.string().trim().min(8, {
+        abort: true,
+        error: "Password must be atleast 8 characters long"
+    }).regex(passwordRegex, {
+        error: "Password must contain atleat 1 uppercase, 1 lowercase, 1 number and 1 special Character"
+    }),
+    confirm: z.string(),
+    firstname: z.string().trim().min(1),
+    lastname: z.string().trim().min(1),
+    email: z.email(),
+}).refine(data => data.confirm === data.password, {
+    path: ["confirm"],
+    error: "Password does not match",
+
+    when(payload) {
+        return registerSchema.pick({
+            password: true, confirm: true
+        }).safeParse(payload.value).success
+    }
 })
 
 
 export {
-    emailSchema, changePasswordSchema
+    emailSchema, changePasswordSchema, registerSchema
 }

@@ -7,6 +7,7 @@ import { redirectDocument, useNavigate } from "react-router";
 import { StatusCodes } from "http-status-codes";
 import { LoginPayload } from "../pages/Login";
 import { toast } from "react-toastify";
+import generateToastDefault from "../utils/toasts";
 
 type FormProps = {
     valid: boolean;
@@ -71,9 +72,14 @@ const Form = React.memo(function({valid, setResponse, setCursor}: FormProps) {
 
             if(response.status === StatusCodes.LENGTH_REQUIRED) {
                 output.issues?.map(issue => {
-                    toast.error(issue.message);
+                    generateToastDefault(issue.message)
                 })
                 return;
+            }
+
+            if(response.status === StatusCodes.BAD_REQUEST) {
+                generateToastDefault(output.msg);
+                return
             }
 
 
