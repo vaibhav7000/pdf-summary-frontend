@@ -1,13 +1,20 @@
-import { forwardRef, InputHTMLAttributes, memo } from "react";
+import React, { forwardRef, HTMLAttributes, InputHTMLAttributes, memo } from "react";
+import merge from "../utils/tailwind-merge";
 
-type InputProps = InputHTMLAttributes<HTMLInputElement>
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+    Icon?: React.JSX.Element;
+    containerProps?: HTMLAttributes<HTMLDivElement>
+}
 
 
 
 const Input = memo(forwardRef<HTMLInputElement, InputProps>((props, ref) => {
+    const {className, containerProps, Icon} = props;
     return (
-        <div>
-            <input ref={ref} id={props.id} type={props.type} placeholder={props.placeholder} className={props.className} onChange={props.onChange} onKeyDown={props.onKeyDown} disabled={props.disabled} maxLength={props.maxLength} />
+        <div className={`${merge("relative", containerProps?.className)}`}>
+            <input ref={ref} id={props.id} type={props.type} placeholder={props.placeholder} className={merge("", className)} onChange={props.onChange} onKeyDown={props.onKeyDown} disabled={props.disabled} maxLength={props.maxLength} />
+
+            {Icon}
         </div>
     )
 }))

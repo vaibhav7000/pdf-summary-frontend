@@ -3,11 +3,15 @@ import Input from "./Input";
 import { baseBackendUrl } from "../utils/constants";
 import { useAtomValue } from "jotai";
 import userAtom from "../store/userStore";
-import { redirectDocument, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { StatusCodes } from "http-status-codes";
 import { LoginPayload } from "../pages/Login";
 import { toast } from "react-toastify";
 import generateToastDefault from "../utils/toasts";
+import PrimaryHeading from "./PrimaryHeading";
+import WrapperIcon from "./IconWrapper";
+import Button from "./Button";
 
 type FormProps = {
     valid: boolean;
@@ -98,13 +102,15 @@ const Form = React.memo(function({valid, setResponse, setCursor}: FormProps) {
     return (
         <form  className="flex flex-col gap-y-6 w-full grow-2 px-6 py-6 rounded-lg text-card-foreground shadow-sm bg-card backdrop-blur-lg border border-slate-700/50" onSubmit={getSummary}>
             <Wrapper>
-                <div className="font-semibold font-headline text-2xl text-white">Understand your PDF</div>
-                <div className="text-base text-white/70 mt-0.5">Enter topic, pdf and get the Summary of that</div>
+                <PrimaryHeading className="font-semibold font-headline text-2xl text-white">PDF AI</PrimaryHeading>
+                <PrimaryHeading className="sm:text-base md:text-xl lg:text-xl xl:text-xl text-white/70 mt-0.5">Topic pdf get the Summary</PrimaryHeading>
             </Wrapper>
 
             <Wrapper>
                 <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-white/60" htmlFor="search">Search</label>
-                <Input ref={searchRef} id="search" type="text" placeholder="eg. Simplify this pdf in simple words" className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm" />
+                <Input ref={searchRef} id="search" type="text" placeholder="eg. Simplify this pdf in simple words" className="flex w-full rounded-md border border-input bg-background px-4 py-4 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-white placeholder:text-lg placeholder:tracking-wide focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm" Icon={<WrapperIcon Icon={MagnifyingGlassIcon} propsIcon={{
+                    className: "w-4 h-4 absolute top-[35%] right-4 "
+                }} />} />
             </Wrapper>
 
             <Wrapper>
@@ -129,7 +135,7 @@ const Form = React.memo(function({valid, setResponse, setCursor}: FormProps) {
 
                 }} type="button">All Summaries</button>
 
-                <button className="bg-blue-400 rounded-lg px-4 py-2 text-white/90 cursor-pointer hover:bg-blue-500 hover:text-white transition-all duration-200" type="submit">Get Summary</button>
+                <Button className="bg-blue-400 rounded-lg px-4 py-2 text-white/90 cursor-pointer hover:bg-blue-500 hover:text-white transition-all duration-200" typeof="">Get Summary</Button>
             </div>
         </form>
     )
